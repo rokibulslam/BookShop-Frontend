@@ -1,18 +1,22 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import img from "../../assets/register.jpg"
 import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer';
+import { Spin, message } from 'antd';
+import { useAddUserMutation } from '../../redux/APIs/authApi';
 const Register = () => {
-
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [createUser, {isLoading, error, isError, isSuccess}]=useAddUserMutation()
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
+    Name: '',
+    Email: '',
+    Password: '',
   });
 
   const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
+    
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
@@ -24,11 +28,24 @@ const Register = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
+    setIsSubmitting(true);
     // Add your signup logic here
     console.log('Form submitted:', formData);
+    await createUser(formData)
+    setIsSubmitting(true);
   };
+  useEffect(() => {
+    if (isSuccess && !error && !isLoading) {
+      message.success("Registration successful");
+      setIsSubmitting(false);
+      // setIsModalOpen(false);
+    } else if (isError && !isSuccess && !isLoading) {
+      message.error(error?.data?.message);
+      setIsSubmitting(false);
+    }
+  }, [isLoading, isError, isSuccess, error]);
 
   return (
     <div>
@@ -47,9 +64,9 @@ const Register = () => {
             </label>
             <input
               type="text"
-              id="name"
-              name="name"
-              value={formData.name}
+              id="Name"
+              name="Name"
+              value={formData.Name}
               onChange={handleChange}
               className="w-full px-3 py-2 leading-tight border rounded-md appearance-none focus:outline-none focus:shadow-outline"
               placeholder="Your Name"
@@ -58,16 +75,16 @@ const Register = () => {
           </div>
           <div className="mb-4">
             <label
-              htmlFor="email"
+              htmlFor="Email"
               className="block text-gray-700 text-sm font-bold mb-2"
             >
               Email
             </label>
             <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
+              type="Email"
+              id="Email"
+              name="Email"
+              value={formData.Email}
               onChange={handleChange}
               className="w-full px-3 py-2 leading-tight border rounded-md appearance-none focus:outline-none focus:shadow-outline"
               placeholder="Email@example.com"
@@ -76,7 +93,7 @@ const Register = () => {
           </div>
           <div className="mb-6">
             <label
-              htmlFor="password"
+              htmlFor="Password"
               className="block text-gray-700 text-sm font-bold mb-2"
             >
               Password
@@ -84,9 +101,9 @@ const Register = () => {
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
-                id="password"
-                name="password"
-                value={formData.password}
+                id="Password"
+                name="Password"
+                value={formData.Password}
                 onChange={handleChange}
                 className="w-full px-3 py-2 leading-tight border rounded-md appearance-none focus:outline-none focus:shadow-outline"
                 placeholder="********"
@@ -146,9 +163,13 @@ const Register = () => {
           <div className="flex items-center justify-between">
             <button
               type="submit"
-              className="bg-black hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              className={`${
+                isSubmitting
+                  ? "transition-all duration-200"
+                  : "bg-black hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-all duration-200"
+              }`}
             >
-              Sign Up
+              {isSubmitting ? <Spin /> : "Sign Up"}
             </button>
           </div>
         </form>

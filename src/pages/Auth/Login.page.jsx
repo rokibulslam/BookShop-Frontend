@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import img from "../../assets/register.jpg";
+import img from "../../assets/login.jpg";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer";
 const Login = () => {
@@ -30,7 +30,7 @@ const Login = () => {
   return (
     <div>
       <Navbar />
-      <div className="flex justify-around items-center">
+      <div className="flex flex-col py-5 lg:flex-row justify-around items-center">
         <div>
           <img src={img} className="h-[500px]" alt="" />
         </div>

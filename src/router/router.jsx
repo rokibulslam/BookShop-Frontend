@@ -4,6 +4,7 @@ import TopTenBooks from "../components/Book/TopTenBooks";
 import Home from "../pages/Home.page"
 import Login from "../pages/Auth/Login.page";
 import Register from "../pages/Auth/Register.page";
+import Books from "../pages/Books.page";
 
 const router = createBrowserRouter([
   {
@@ -18,7 +19,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/books",
-    element: <Home />,
+    element: <Books />,
   },
   {
     path: "/login",
