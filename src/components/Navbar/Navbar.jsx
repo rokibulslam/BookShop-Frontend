@@ -14,7 +14,7 @@ const Navbar = () => {
 
   return (
     <div className="bg-blue-500 w-screen">
-      <nav className="relative px-4 py-4 flex justify-between items-center bg-blue-50">
+      <nav className="relative px-4 py-4 flex justify-between items-center bg-[#27DEC0]">
         <a className="text-3xl font-bold leading-none" href="#">
           {/* Your SVG code */}
           <svg className="h-10" alt="logo" viewBox="0 0 10240 10240">
@@ -51,19 +51,19 @@ const Navbar = () => {
         <div>
           <Link
             className="hidden lg:inline-block  lg:mr-3  hover:text-blue-500 text-sm text-dark font-bold  rounded-xl transition duration-200"
-            to=""
+            to="/books"
           >
             Books
           </Link>
           <Link
             className="hidden lg:inline-block lg:mr-3 py-2 px-6 bg-gray-50 hover:bg-gray-100 text-sm text-gray-900 font-bold  rounded-xl transition duration-200"
-            to=""
+            to="/login"
           >
             Sign up
           </Link>
           <Link
             className="hidden lg:inline-block py-2 px-6 bg-blue-500 hover:bg-gray-600 text-sm text-white font-bold rounded-xl transition duration-200 "
-            to=""
+            to="/register"
           >
             Sign up
           </Link>
