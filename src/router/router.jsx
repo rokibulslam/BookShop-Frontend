@@ -5,17 +5,27 @@ import Home from "../pages/Home.page"
 import Login from "../pages/Auth/Login.page";
 import Register from "../pages/Auth/Register.page";
 import Books from "../pages/Books.page";
+import BookUpdate from "../pages/BookUpdate.page";
+import ProtectedRoute from "../pages/Auth/ProtectedRoute";
 
 const router = createBrowserRouter([
   {
     path: "/",
-        element: <Layout />,
-        children: [
-            {
-                path: "/",
-                element:<TopTenBooks />
-        }
-    ]
+    element: <Layout />,
+    children: [
+      {
+        path: "/",
+        element: <TopTenBooks />,
+      },
+      {
+        path: "/updateBook",
+        element: (
+          <ProtectedRoute>
+            <BookUpdate />
+          </ProtectedRoute>
+        ),
+      },
+    ],
   },
   {
     path: "/books",
