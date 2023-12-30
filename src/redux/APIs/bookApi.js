@@ -52,6 +52,25 @@ export const bookApi = createApi({
       },
       providesTags: ["Book"],
     }),
+    getBookListByGenre: builder.query({
+      query: (args) => {
+        const { genre } = args;
+        return {
+          url: `/booksByGenre/${genre}`,
+        };
+      },
+      providesTags: ["Book"],
+    }),
+    getBookListByYear: builder.query({
+      query: (args) => {
+        const { year } = args;
+        
+        return {
+          url: `/booksByYear/${year}`,
+        };
+      },
+      providesTags: ["Book"],
+    }),
     getYearList: builder.query({
       query: () => {
         return {
@@ -84,4 +103,6 @@ export const {
   useGetGenreListQuery,
   useGetSingleBookQuery,
   useGetYearListQuery,
+  useGetBookListByGenreQuery,
+  useGetBookListByYearQuery
 } = bookApi;
