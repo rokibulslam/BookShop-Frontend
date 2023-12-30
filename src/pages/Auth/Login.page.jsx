@@ -1,13 +1,19 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import img from "../../assets/login.jpg";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer";
+import { useLoginUserMutation } from '../../redux/APIs/authApi';
+import { Spin, message } from 'antd';
+import { setToken, setUserDetails } from '../../helpers/sessionHelper';
+import { useNavigate } from 'react-router-dom';
 const Login = () => {
+    const [isSubmitting, setIsSubmitting] = useState(false);
+  const [login, {isLoading, isError, isSuccess, error, data}]= useLoginUserMutation()
    const [formData, setFormData] = useState({
-     email: "",
-     password: "",
+     Email: "",
+     Password: "",
    });
-
+  const navigate = useNavigate();
    const [showPassword, setShowPassword] = useState(false);
 
    const handleChange = (e) => {
@@ -22,11 +28,30 @@ const Login = () => {
      setShowPassword(!showPassword);
    };
 
-   const handleSubmit = (e) => {
-     e.preventDefault();
+  const handleSubmit = async (e) => {
+     
+    e.preventDefault();
+     setIsSubmitting(true);
      // Add your login logic here
      console.log("Form submitted:", formData);
-   };
+    await login(formData)
+    
+  };
+  useEffect(() => {
+    if (error) {
+      setIsSubmitting(false);
+      message.error("Enter User credential correctly!!!");
+    }
+    if (isSuccess) {
+      message.success("Login Success");
+      // console.log(data)
+      setToken(data?.data?.token);
+      setUserDetails(data?.data?.user)
+      console.log(data);
+      navigate("/");
+      setIsSubmitting(false)
+    }
+  }, [error, isSuccess, isLoading, data, login]);
   return (
     <div>
       <Navbar />
@@ -37,16 +62,16 @@ const Login = () => {
         <form className="w-full max-w-sm" onSubmit={handleSubmit}>
           <div className="mb-4">
             <label
-              htmlFor="email"
+              htmlFor="Email"
               className="block text-gray-700 text-sm font-bold mb-2"
             >
               Email
             </label>
             <input
               type="email"
-              id="email"
-              name="email"
-              value={formData.email}
+              id="Email"
+              name="Email"
+              value={formData.Email}
               onChange={handleChange}
               className="w-full px-3 py-2 leading-tight border rounded-md appearance-none focus:outline-none focus:shadow-outline"
               placeholder="Email@example.com"
@@ -63,9 +88,9 @@ const Login = () => {
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
-                id="password"
-                name="password"
-                value={formData.password}
+                id="Password"
+                name="Password"
+                value={formData.Password}
                 onChange={handleChange}
                 className="w-full px-3 py-2 leading-tight border rounded-md appearance-none focus:outline-none focus:shadow-outline"
                 placeholder="********"
@@ -125,9 +150,14 @@ const Login = () => {
           <div className="flex items-center justify-between">
             <button
               type="submit"
-              className="bg-black hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              className={`${
+                isSubmitting
+                  ? "transition-all duration-200"
+                  : "bg-black hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-all duration-200"
+              }`}
+              
             >
-              Log In
+             {isSubmitting ? <Spin /> : "Log In"}
             </button>
           </div>
         </form>
