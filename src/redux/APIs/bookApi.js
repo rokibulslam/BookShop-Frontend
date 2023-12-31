@@ -26,6 +26,14 @@ export const bookApi = createApi({
       }),
       invalidatesTags: ["Book", "Genre", "Year"],
     }),
+    createReview: builder.mutation({
+      query: (data) => ({
+        url: "/createReview",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["Book"],
+    }),
     updateBook: builder.mutation({
       query: ({ id, formData }) => {
         return {
@@ -64,7 +72,7 @@ export const bookApi = createApi({
     getBookListByYear: builder.query({
       query: (args) => {
         const { year } = args;
-        
+
         return {
           url: `/booksByYear/${year}`,
         };
@@ -104,5 +112,5 @@ export const {
   useGetSingleBookQuery,
   useGetYearListQuery,
   useGetBookListByGenreQuery,
-  useGetBookListByYearQuery
+  useGetBookListByYearQuery, useCreateReviewMutation
 } = bookApi;

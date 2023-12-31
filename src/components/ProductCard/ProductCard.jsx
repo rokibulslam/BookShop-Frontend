@@ -9,7 +9,7 @@ import moment from 'moment';
 import { Link } from 'react-router-dom';
 const { Meta } = Card;
 const ProductCard = ({ item }) => {
-  // console.log(item);
+  console.log(item);
   return (
     <Card
       style={{
@@ -28,7 +28,7 @@ const ProductCard = ({ item }) => {
         Published: {moment(item.PublicationDate).format("Do MMM YYYY")}
       </p>
       <div className="flex justify-center items-center space-x-3">
-        <Link className="border-[1px] border-[#27DEC0] px-2  py-[1px] rounded-md hover:bg-[#27dec0dd] bg-[#27dec025] hover:text-black text-[13px]">
+        <Link to={`/details/${item._id}`} className="border-[1px] border-[#27DEC0] px-2  py-[1px] rounded-md hover:bg-[#27dec0dd] bg-[#27dec025] hover:text-black text-[13px]">
           Details
         </Link>
         <button className="border-[1px] border-[#27DEC0] px-2  py-[1px] rounded-md hover:bg-[#27dec0dd] bg-[#27dec025] hover:text-black text-[13px]">
