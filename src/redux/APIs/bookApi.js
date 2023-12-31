@@ -35,11 +35,13 @@ export const bookApi = createApi({
       invalidatesTags: ["Book"],
     }),
     updateBook: builder.mutation({
-      query: ({ id, formData }) => {
+      query: ({ id, bookData }) => {
+        console.log(id);
+        console.log(id);
         return {
           url: `/bookUpdate/${id}`,
           method: "PUT",
-          body: formData,
+          body: bookData,
         };
       },
       invalidatesTags: ["Book", "Genre", "Year"],
@@ -96,10 +98,10 @@ export const bookApi = createApi({
     }),
     deleteBook: builder.mutation({
       query: (id) => ({
-        url: `/bookDelete/${id}`,
+        url: `/deleteBook/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["Brand"],
+      invalidatesTags: ["Book", "Genre", "Year"],
     }),
   }),
 });
@@ -112,5 +114,5 @@ export const {
   useGetSingleBookQuery,
   useGetYearListQuery,
   useGetBookListByGenreQuery,
-  useGetBookListByYearQuery, useCreateReviewMutation
+  useGetBookListByYearQuery, useCreateReviewMutation, useUpdateBookMutation
 } = bookApi;

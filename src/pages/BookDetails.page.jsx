@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom';
-import { useCreateReviewMutation, useGetSingleBookQuery } from '../redux/APIs/bookApi';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useCreateReviewMutation, useDeleteBookMutation, useGetSingleBookQuery } from '../redux/APIs/bookApi';
 import moment from 'moment';
 import { Spin, message } from 'antd';
 import profile from '../assets/profile.jpg'
@@ -9,7 +9,8 @@ const BookDetails = () => {
   
   const { id } = useParams()
   const { data, isLoading, isSuccess, isError } = useGetSingleBookQuery({ id })
-  const [createReview, {isSuccess:reviewSuccess, isError:reviewIsError}]=useCreateReviewMutation()
+  const [createReview, { isSuccess: reviewSuccess, isError: reviewIsError }] = useCreateReviewMutation()
+  const [deleteBook,{isSuccess:deleteSuccess, isError:deleteIsError, isLoading:deleteIsLoading}]=useDeleteBookMutation()
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({});
   const handleChange = (e) => {
@@ -22,7 +23,8 @@ const BookDetails = () => {
   const book = data?.data[0]
   const review = data?.data?.reviews
   const user = getUserDetails()
-  const navigate=useNavigate()
+  const navigate = useNavigate()
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!user) {
@@ -36,6 +38,28 @@ const BookDetails = () => {
     console.log("Form submitted:", review);
     await createReview(review);
   };
+
+  const handleEdit = (id) => {
+    if (user.Email !== book.UserEmail) {
+      message.error('You Dont Have Enough Permission')
+    }
+    if (user.Email === book.UserEmail) {
+      navigate(`/updateBook/${id}`);
+    }
+  }
+  const handleDelete = async()=>{
+    if (user.Email !== book.UserEmail) {
+      message.error('You Dont Have Enough Permission')
+    }
+    if (user.Email === book.UserEmail) {
+      const isConfirmed = window.confirm(
+        "Are you sure you want to delete this item?"
+      );
+      if (isConfirmed) {
+        await deleteBook(id)
+      }
+    }
+  }
   useEffect(() => {
     if (reviewIsError) {
       setIsSubmitting(false);
@@ -46,6 +70,15 @@ const BookDetails = () => {
       setIsSubmitting(false);
     }
   }, [reviewIsError, reviewSuccess]);
+  useEffect(() => {
+    if (deleteSuccess) {
+      message.success('Deleted Successfully');
+      navigate('/')
+    }
+    if (deleteIsError) {
+      message.error('Something Went Wrong!');
+    }
+  }, [deleteIsError, deleteIsLoading, deleteSuccess]);
   return (
     <div className="mx-[50px]">
       <h1 className="text-center text-4xl py-3">Book Details</h1>
@@ -72,12 +105,12 @@ const BookDetails = () => {
             {moment(book?.PublicationDate).format("Do MMM YYYY")}
           </p>
           <div className=" space-x-5 py-5">
-            <button className="border-[1px] border-[#27DEC0] px-2  py-[1px] rounded-md hover:bg-[#27dec0dd] bg-[#27dec025] hover:text-black text-[13px]">
+            <Link onClick={()=>handleEdit()} className="border-[1px] border-[#27DEC0] px-2  py-[1px] rounded-md hover:bg-[#27dec0dd] bg-[#27dec025] hover:text-black text-[13px]">
               Edit Book
-            </button>
-            <button className="border-[1px] border-[#de2727] px-2  py-[1px] rounded-md hover:bg-[#27dec0dd] bg-[#fb414125] hover:text-black text-[13px] text-red-600">
+            </Link>
+            <Link onClick={()=>handleDelete()} className="border-[1px] border-[#de2727] px-2  py-[1px] rounded-md hover:bg-[#27dec0dd] bg-[#fb414125] hover:text-black text-[13px] text-red-600">
               Delete Book
-            </button>
+            </Link>
           </div>
           {/* Review Input  */}
           <form className="w-full max-w-sm my-10" onSubmit={handleSubmit}>

@@ -9,7 +9,7 @@ import moment from 'moment';
 import { Link } from 'react-router-dom';
 const { Meta } = Card;
 const ProductCard = ({ item }) => {
-  console.log(item);
+  // console.log(item);
   return (
     <Card
       style={{

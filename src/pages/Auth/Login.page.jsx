@@ -47,7 +47,7 @@ const Login = () => {
       // console.log(data)
       setToken(data?.data?.token);
       setUserDetails(data?.data?.user)
-      console.log(data);
+      // console.log(data);
       navigate("/");
       setIsSubmitting(false)
     }

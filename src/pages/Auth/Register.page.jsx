@@ -32,7 +32,7 @@ const Register = () => {
     e.preventDefault();
     setIsSubmitting(true);
     // Add your signup logic here
-    console.log('Form submitted:', formData);
+    // console.log('Form submitted:', formData);
     await createUser(formData)
     setIsSubmitting(true);
   };

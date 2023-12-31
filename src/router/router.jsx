@@ -20,7 +20,7 @@ const router = createBrowserRouter([
         element: <TopTenBooks />,
       },
       {
-        path: "/updateBook",
+        path: "/updateBook/:id",
         element: (
           <ProtectedRoute>
             <BookUpdate />
